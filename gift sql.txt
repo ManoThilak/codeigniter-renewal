@@ -1,0 +1,592 @@
+CREATE TABLE `package_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `package_name` text COLLATE utf8_unicode_ci NOT NULL,
+  `tot_contacts` int(11) NOT NULL,
+  `adv_amt` float(10,2) NOT NULL ,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+CREATE TABLE `package_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+INSERT INTO `package_types`( `title`) VALUES ('One time');
+INSERT INTO `package_types`( `title`) VALUES ('Regular');
+INSERT INTO `package_types`( `title`) VALUES ('Dummy');
+
+
+alter table clients add  'package_id` int(11) NULL;
+
+alter table clients add  'package_type_id` int(11) NULL;
+alter table clients add  salesmanager_id int(11) NULL;
+
+alter table clients add  `client_name` text COLLATE utf8_unicode_ci NOT NULL;
+
+alter table clients add  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL;
+
+alter table clients add  `scompany_name` varchar(150) COLLATE utf8_unicode_ci NOT NULL;
+
+alter table invoices add  invoice_types varchar(255) COLLATE utf8_unicode_ci NOT NULL;
+
+CREATE TABLE `salesmanager` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `address` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_date` date NOT NULL,
+  `website` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency_symbol` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `starred_by` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `group_ids` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `is_lead` tinyint(1) NOT NULL DEFAULT 0,
+  `lead_status_id` int(11) NOT NULL,
+  `owner_id` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 0,
+  `lead_source_id` int(11) NOT NULL,
+  `last_lead_status` text COLLATE utf8_unicode_ci NOT NULL,
+  `client_migration_date` date NOT NULL,
+  `vat_number` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `disable_online_payment` tinyint(1) NOT NULL DEFAULT 0,
+  `package_id` int(11) DEFAULT NULL,
+  `client_name` text COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `package_type_id` int(11) DEFAULT NULL,
+ `comm_amt` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+-------------------------
+CREATE TABLE `pinvoices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `client_id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL DEFAULT 0,
+  `bill_date` date NOT NULL,
+  `due_date` date NOT NULL,
+  `note` mediumtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `labels` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `last_email_sent_date` date DEFAULT NULL,
+  `status` enum('draft','not_paid','cancelled') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'draft',
+  `tax_id` int(11) NOT NULL DEFAULT 0,
+  `tax_id2` int(11) NOT NULL DEFAULT 0,
+  `tax_id3` int(11) NOT NULL DEFAULT 0,
+  `recurring` tinyint(4) NOT NULL DEFAULT 0,
+  `recurring_invoice_id` int(11) NOT NULL DEFAULT 0,
+  `repeat_every` int(11) NOT NULL DEFAULT 0,
+  `repeat_type` enum('days','weeks','months','years') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `no_of_cycles` int(11) NOT NULL DEFAULT 0,
+  `next_recurring_date` date DEFAULT NULL,
+  `no_of_cycles_completed` int(11) NOT NULL DEFAULT 0,
+  `due_reminder_date` date DEFAULT NULL,
+  `recurring_reminder_date` date DEFAULT NULL,
+  `discount_amount` double NOT NULL,
+  `discount_amount_type` enum('percentage','fixed_amount') COLLATE utf8_unicode_ci NOT NULL,
+  `discount_type` enum('before_tax','after_tax') COLLATE utf8_unicode_ci NOT NULL,
+  `cancelled_at` datetime DEFAULT NULL,
+  `cancelled_by` int(11) NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+
+CREATE TABLE `pinvoice_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `quantity` double NOT NULL,
+  `unit_type` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `rate` double NOT NULL,
+  `total` double NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 0,
+  `invoice_id` int(11) NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+
+CREATE TABLE `pinvoice_payments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `amount` double NOT NULL,
+  `payment_date` date NOT NULL,
+  `payment_method_id` int(11) NOT NULL,
+  `note` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `invoice_id` int(11) NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `transaction_id` tinytext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_by` int(11) DEFAULT 1,
+  `created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`),
+  KEY `id_2` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+
+alter table clients add sphone varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL
+
+
+
+CREATE TABLE `pnotes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `project_id` int(11) NOT NULL DEFAULT 0,
+  `client_id` int(11) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `labels` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `files` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `is_public` tinyint(1) NOT NULL DEFAULT 0,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `type` mediumtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+
+
+
+CREATE TABLE `customers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `client_id` int(11) NOT NULL,
+  `customer_name` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `birth_date` date DEFAULT  NULL,
+  `anniversary_date` date DEFAULT NULL,
+  `address` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_date` date NOT NULL,
+  `website` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency_symbol` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `starred_by` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `group_ids` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `is_lead` tinyint(1) NOT NULL DEFAULT 0,
+  `lead_status_id` int(11) NOT NULL,
+  `owner_id` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 0,
+  `lead_source_id` int(11) NOT NULL,
+  `last_lead_status` text COLLATE utf8_unicode_ci NOT NULL,
+  `client_migration_date` date NOT NULL,
+  `vat_number` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `disable_online_payment` tinyint(1) NOT NULL DEFAULT 0,
+  `package_id` int(11) DEFAULT NULL,
+  `client_name` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `package_type_id` int(11) DEFAULT NULL,
+ `comm_amt` double DEFAULT NULL,
+`status` text COLLATE utf8_unicode_ci DEFAULT 'UnAssigned',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+
+
+
+CREATE TABLE `teledatas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `telemarketer_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,	
+  `client_id` int(11) NOT NULL,
+  `assign_date` date DEFAULT  NULL,
+  `customer_name` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `birth_date` date DEFAULT  NULL,
+  `anniversary_date` date DEFAULT NULL,
+  `address` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_date` date NOT NULL,
+  `website` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency_symbol` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `starred_by` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `group_ids` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `is_lead` tinyint(1) NOT NULL DEFAULT 0,
+  `lead_status_id` int(11) NOT NULL,
+  `owner_id` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 0,
+  `lead_source_id` int(11) NOT NULL,
+  `last_lead_status` text COLLATE utf8_unicode_ci NOT NULL,
+  `client_migration_date` date NOT NULL,
+  `vat_number` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `disable_online_payment` tinyint(1) NOT NULL DEFAULT 0,
+  `package_id` int(11) DEFAULT NULL,
+  `client_name` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `package_type_id` int(11) DEFAULT NULL,
+ `comm_amt` double DEFAULT NULL,
+ `status_id` int(11) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+CREATE TABLE `status_master` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+CREATE TABLE `complete_master` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+CREATE TABLE `giftfor_master` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+INSERT INTO `status_master`( `title`) VALUES ('UnAssigned');
+INSERT INTO `status_master`( `title`) VALUES ('Assigned');
+
+INSERT INTO `complete_master` ( `title`) VALUES ('Incomplete');
+INSERT INTO `complete_master` ( `title`) VALUES ('Complete');
+
+alter table teledatas add `complete_id` int(11) NOT NULL DEFAULT 2;
+alter table teledatas add `status_id` int(11) NOT NULL DEFAULT 1;
+alter table teledatas add `next_followupdate` date DEFAULT NULL;
+alter table teledatas add `comments` text COLLATE utf8_unicode_ci DEFAULT NULL;
+
+
+alter table customers add `complete_id` int(11) NOT NULL DEFAULT 2;
+alter table customers add `next_followupdate` date DEFAULT NULL;
+alter table customers add `comments` text COLLATE utf8_unicode_ci DEFAULT NULL;
+alter table customers add `telemarketer_id` int(11) NOT NULL DEFAULT 0;
+alter table customers add `transfer_id` int(11) NOT NULL DEFAULT 2;
+
+alter table teledatas add `landmark` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL;
+alter table giftdatas add `landmark` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL;
+
+alter table courierdatas add `gift_for` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL;
+
+
+
+
+
+
+CREATE TABLE `telemarketers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `address` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_date` date NOT NULL,
+  `website` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency_symbol` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `starred_by` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `group_ids` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `is_lead` tinyint(1) NOT NULL DEFAULT 0,
+  `lead_status_id` int(11) NOT NULL,
+  `owner_id` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 0,
+  `lead_source_id` int(11) NOT NULL,
+  `last_lead_status` text COLLATE utf8_unicode_ci NOT NULL,
+  `client_migration_date` date NOT NULL,
+  `vat_number` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `disable_online_payment` tinyint(1) NOT NULL DEFAULT 0,
+  `package_id` int(11) DEFAULT NULL,
+  `client_name` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `package_type_id` int(11) DEFAULT NULL,
+  `comm_amt` double DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+
+
+CREATE TABLE `giftdatas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `telemarketer_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `teledatas_id` int(11) NOT NULL,	
+  `client_id` int(11) NOT NULL,
+  `assign_date` date DEFAULT  NULL,
+  `customer_name` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `birth_date` date DEFAULT  NULL,
+  `anniversary_date` date DEFAULT NULL,
+  `address` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_date` date NOT NULL,
+  `website` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency_symbol` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `starred_by` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `group_ids` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `is_lead` tinyint(1) NOT NULL DEFAULT 0,
+  `lead_status_id` int(11) NOT NULL,
+  `owner_id` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 0,
+  `lead_source_id` int(11) NOT NULL,
+  `last_lead_status` text COLLATE utf8_unicode_ci NOT NULL,
+  `client_migration_date` date NOT NULL,
+  `vat_number` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `disable_online_payment` tinyint(1) NOT NULL DEFAULT 0,
+  `package_id` int(11) DEFAULT NULL,
+  `client_name` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `package_type_id` int(11) DEFAULT NULL,
+ `comm_amt` double DEFAULT NULL,
+ `status_id` int(11) NOT NULL DEFAULT 1,
+ `complete_id` int(11) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+-------------------------------------------------
+
+
+
+INSERT INTO teledatas (telemarketer_id,customer_id,client_id,customer_name,birth_date,anniversary_date,address,city,state,zip,phone,email) 
+SELECT '1',id, client_id,customer_name,birth_date,anniversary_date,address,city,state,zip,phone,email FROM customers
+                WHERE customers.id >= 4 AND customers.id <= 6 and client_id=1;
+
+
+update customers set status='Assigned'
+                WHERE customers.id >= 4 AND customers.id <= 6 and customers.client_id = 1;
+
+
+------------------------------------------------------
+CREATE TABLE religion (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+CREATE TABLE sub_religion (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `religion_id` int(11) NOT NULL ,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+CREATE TABLE gift_master (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `religion_id` int(11) NOT NULL ,
+  `sub_religion_id` int(11) NOT NULL ,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+alter table customers add religion_id int(11) NOT NULL DEFAULT 0;
+alter table customers add sub_religion_id  int(11) NOT NULL DEFAULT 0;
+alter table customers add gift_id int(11) NOT NULL DEFAULT 0;
+
+alter table customers add aid int(11) NOT NULL DEFAULT 0;
+alter table customers add bid int(11) NOT NULL DEFAULT 0;
+alter table customers add acouriersent_id int(11) NOT NULL DEFAULT 0;
+alter table customers add bcouriersent_id int(11) NOT NULL DEFAULT 0;
+
+CREATE TABLE `stockin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `religion_id` int(11) NOT NULL DEFAULT 0,
+  `sub_religion_id` int(11) NOT NULL DEFAULT 0,
+  `gift_id` int(11) NOT NULL DEFAULT 0,
+  `bill_date` date NOT NULL,
+  `supplier_id` int(11) NOT NULL  DEFAULT 0,
+  `company_name` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `item_id` int(11) NOT NULL  DEFAULT 0,
+  `item` text COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `quantity` double NOT NULL,
+  `unit_type` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `godown_id` int(11) NOT NULL  DEFAULT 0,
+  `godown` text COLLATE utf8_unicode_ci NOT NULL  DEFAULT '',
+  `note` mediumtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `labels` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` enum('draft','not_paid','cancelled') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'draft',
+  `cancelled_at` datetime DEFAULT NULL,
+  `cancelled_by` int(11) NOT NULL  DEFAULT 0,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
+
+CREATE TABLE `courierdatas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `telemarketer_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `teledatas_id` int(11) NOT NULL,	
+  `client_id` int(11) NOT NULL,
+  `assign_date` date DEFAULT  NULL,
+  `customer_name` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `birth_date` date DEFAULT  NULL,
+  `anniversary_date` date DEFAULT NULL,
+  `address` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_date` date NOT NULL,
+  `website` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency_symbol` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `starred_by` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `group_ids` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `is_lead` tinyint(1) NOT NULL DEFAULT 0,
+  `lead_status_id` int(11) NOT NULL,
+  `owner_id` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 0,
+  `lead_source_id` int(11) NOT NULL,
+  `last_lead_status` text COLLATE utf8_unicode_ci NOT NULL,
+  `client_migration_date` date NOT NULL,
+  `vat_number` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `disable_online_payment` tinyint(1) NOT NULL DEFAULT 0,
+  `package_id` int(11) DEFAULT NULL,
+  `client_name` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `package_type_id` int(11) DEFAULT NULL,
+ `comm_amt` double DEFAULT NULL,
+ `status_id` int(11) NOT NULL DEFAULT 1,
+ `complete_id` int(11) NOT NULL DEFAULT 1,
+  `religion_id` int(11) NOT NULL DEFAULT 0,
+  `sub_religion_id` int(11) NOT NULL DEFAULT 0,
+  `gift_id` int(11) NOT NULL DEFAULT 0,
+  `courier_status_id` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+
+CREATE TABLE `couriersentdatas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `courier_id` int(11) NOT NULL,
+  `courier_date` date DEFAULT  NULL,
+  `tracking_num` text COLLATE utf8_unicode_ci DEFAULT NULL,  
+  `telemarketer_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `teledatas_id` int(11) NOT NULL,	
+  `client_id` int(11) NOT NULL,
+  `assign_date` date DEFAULT  NULL,
+  `customer_name` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `birth_date` date DEFAULT  NULL,
+  `anniversary_date` date DEFAULT NULL,
+  `address` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_date` date NOT NULL,
+  `website` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency_symbol` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `starred_by` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `group_ids` text COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `is_lead` tinyint(1) NOT NULL DEFAULT 0,
+  `lead_status_id` int(11) NOT NULL,
+  `owner_id` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 0,
+  `lead_source_id` int(11) NOT NULL,
+  `last_lead_status` text COLLATE utf8_unicode_ci NOT NULL,
+  `client_migration_date` date NOT NULL,
+  `vat_number` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `currency` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `disable_online_payment` tinyint(1) NOT NULL DEFAULT 0,
+  `package_id` int(11) DEFAULT NULL,
+  `client_name` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `package_type_id` int(11) DEFAULT NULL,
+ `comm_amt` double DEFAULT NULL,
+ `status_id` int(11) NOT NULL DEFAULT 1,
+ `complete_id` int(11) NOT NULL DEFAULT 1,
+  `religion_id` int(11) NOT NULL DEFAULT 0,
+  `sub_religion_id` int(11) NOT NULL DEFAULT 0,
+  `gift_id` int(11) NOT NULL DEFAULT 0,
+  `courier_status_id` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+
+alter table courierdatas add couriersent_id int(11) NOT NULL DEFAULT 0;
+alter table couriersentdatas add `landmark` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL;
+
+alter table couriersentdatas  add `gift_for` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL;
+alter table couriersentdatas  add `courier_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL;
+alter table customers add `giftfor_id` int(11) NOT NULL DEFAULT 0;
+alter table customers add `giftfora_id` int(11) NOT NULL DEFAULT 0;
+alter table customers add `giftforb_id` int(11) NOT NULL DEFAULT 0;
+alter table customers add `salesmanager_id` int(11) NOT NULL DEFAULT 0;
+alter table couriersentdatas add `salesmanager_id` int(11) NOT NULL DEFAULT 0;
+alter table users add telecallers_id int(11) NOT NULL DEFAULT 0;
+alter table users add salesmanager_id int(11) NOT NULL DEFAULT 0;
+alter table customers add assign_date date DEFAULT  NULL;
+--------------------------------Client Upload-----------------------------------------------------------------------
+alter table customers add completed_date date DEFAULT  NULL;
+
+alter table invoices add `salesmanager_id` int(11) NOT NULL DEFAULT 0;
+
+alter table invoice_items add `created_at` date DEFAULT NULL;
+
+---change invoicepayments createdat as date
+
+----logo chanage(download folder)
+
+---telemarketer name should be as constant--told as admin
+
+
+UPDATE clients
+INNER JOIN users ON users.client_id = clients.id
+SET clients.email = users.email;
+
+------invoice logo
+
+--------------------------------Upload 09052022-----------------------------------------------------------
+alter table roles add display_id int(11) NOT NULL DEFAULT 0;
+---------------------------------
+alter table clients add `image` varchar(100) DEFAULT NULL;
+
+
+-------------------------------------
+
+alter table invoices add `entry_id` varchar(10) DEFAULT NULL;
+
+
+-----------------------------------Upload 28052022-------------------------------------------
+alter table clients add `domain_name` varchar(100) DEFAULT NULL;
+alter table invoices add `renewal_status` int(11) NOT NULL DEFAULT 0;
+alter table invoices add `next_followup_date` date DEFAULT NULL;
+alter table invoice_payments add `renewal_status` int(11) NOT NULL DEFAULT 0;
