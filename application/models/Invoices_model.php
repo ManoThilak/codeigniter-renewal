@@ -71,26 +71,33 @@ class Invoices_model extends Crud_model {
         $now = get_my_local_time("Y-m-d");
         //  $options['status'] = "draft";
         $status = get_array_value($options, "status");
-
+        if ($status == '0') {
+            $where .= " AND $invoices_table.renewal_status = 0 ";
+        } else if ($status == '1') {
+            $where .= " AND $invoices_table.renewal_status = 1 ";
+        } 
+        // else  {
+        //     $where .= " AND $invoices_table.renewal_status = 0 ";
+        // } 
 
         $invoice_value_calculation_query = $this->_get_invoice_value_calculation_query($invoices_table);
 
 
         $invoice_value_calculation = "TRUNCATE($invoice_value_calculation_query,2)";
 
-        if ($status === "draft") {
-            $where .= " AND $invoices_table.status='draft' AND IFNULL(payments_table.payment_received,0)<=0";
-        } else if ($status === "not_paid") {
-            $where .= " AND $invoices_table.status !='draft' AND $invoices_table.status!='cancelled' AND IFNULL(payments_table.payment_received,0)<=0";
-        } else if ($status === "partially_paid") {
-            $where .= " AND IFNULL(payments_table.payment_received,0)>0 AND IFNULL(payments_table.payment_received,0)<$invoice_value_calculation";
-        } else if ($status === "fully_paid") {
-            $where .= " AND TRUNCATE(IFNULL(payments_table.payment_received,0),2)>=$invoice_value_calculation";
-        } else if ($status === "overdue") {
-            $where .= " AND $invoices_table.status !='draft' AND $invoices_table.status!='cancelled' AND $invoices_table.due_date<'$now' AND TRUNCATE(IFNULL(payments_table.payment_received,0),2)<$invoice_value_calculation";
-        } else if ($status === "cancelled") {
-            $where .= " AND $invoices_table.status='cancelled' ";
-        }
+        // if ($status === "draft") {
+        //     $where .= " AND $invoices_table.status='draft' AND IFNULL(payments_table.payment_received,0)<=0";
+        // } else if ($status === "not_paid") {
+        //     $where .= " AND $invoices_table.status !='draft' AND $invoices_table.status!='cancelled' AND IFNULL(payments_table.payment_received,0)<=0";
+        // } else if ($status === "partially_paid") {
+        //     $where .= " AND IFNULL(payments_table.payment_received,0)>0 AND IFNULL(payments_table.payment_received,0)<$invoice_value_calculation";
+        // } else if ($status === "fully_paid") {
+        //     $where .= " AND TRUNCATE(IFNULL(payments_table.payment_received,0),2)>=$invoice_value_calculation";
+        // } else if ($status === "overdue") {
+        //     $where .= " AND $invoices_table.status !='draft' AND $invoices_table.status!='cancelled' AND $invoices_table.due_date<'$now' AND TRUNCATE(IFNULL(payments_table.payment_received,0),2)<$invoice_value_calculation";
+        // } else if ($status === "cancelled") {
+        //     $where .= " AND $invoices_table.status='cancelled' ";
+        // }
 
 
         $recurring = get_array_value($options, "recurring");
@@ -141,7 +148,7 @@ class Invoices_model extends Crud_model {
          LEFT JOIN (SELECT invoice_id, GROUP_CONCAT(invoice_items.title ORDER BY invoice_items.title ASC SEPARATOR ', ') AS combined_titles FROM invoice_items WHERE deleted = 0 GROUP BY invoice_id) AS sevice_table ON sevice_table.invoice_id = invoices.id
 
         $join_custom_fieds
-        WHERE $invoices_table.deleted = 0 and $invoices_table.renewal_status = 0 $where order by $invoices_table.next_followup_date asc";
+        WHERE $invoices_table.deleted = 0  $where order by $invoices_table.next_followup_date asc";
         return $this->db->query($sql);
         // $this->db->query($sql);
         // echo $this->db->last_query();

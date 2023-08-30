@@ -48,9 +48,9 @@
     $(selector).appTable({
     source: '<?php echo_uri("invoices/list_data") ?>',
             dateRangeType: dateRange,
-            order: [[0, "desc"]],
+            order: [[8, "desc"]],
             filterDropdown: [
-            //{name: "status", class: "w150", options: <?php $this->load->view("invoices/invoice_statuses_dropdown"); ?>},
+            {name: "status", class: "w150", options: <?php $this->load->view("invoices/invoice_statuses_dropdown"); ?>},
             <?php if ($currencies_dropdown) { ?>
                             {name: "currency", class: "w150", options: <?php echo $currencies_dropdown; ?>}
             <?php } ?>
@@ -69,11 +69,11 @@
 
             {title: "<?php echo lang("next_followupdate") ?>", "class": "w15p", "iDataSort": 5},
             // {visible: false, searchable: false},
-            {title: "<?php echo lang("items") ?>", "class": ""}
+            {title: "<?php echo lang("items") ?>", "class": ""},
             // {title: "<?php echo lang("invoice_value") ?>", "class": "w10p text-right"},
             // {title: "<?php echo lang("payment_received") ?>", "class": "w10p text-right"},
             // {title: "<?php echo lang("due") ?>", "class": "w10p text-right"},
-            // {title: "<?php echo lang("status") ?>", "class": "w10p text-center"},
+            {title: "<?php echo lang("status") ?>", "class": "w5p text-center"}
             // {title: "<?php echo lang("entry_by") ?>", "class": ""}
 <?php echo $custom_field_headers; ?>,
             {title: '<i class="fa fa-bars"></i>', "class": "text-center dropdown-option w100"}

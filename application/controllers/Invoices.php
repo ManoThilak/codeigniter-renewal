@@ -504,11 +504,16 @@ class Invoices extends MY_Controller {
 
 
         $invoice_labels = "";
-        if ($data->labels) {
-            $labels = explode(",", $data->labels);
-            foreach ($labels as $label) {
-                $invoice_labels .= "<span class='mt0 label label-info large ml10 clickable'  title='$label'>" . $label . "</span>";
-            }
+        // if ($data->labels) {
+        //     $labels = explode(",", $data->labels);
+        //     foreach ($labels as $label) {
+        //         $invoice_labels .= "<span class='mt0 label label-info large ml10 clickable'  title='$label'>" . $label . "</span>";
+        //     }
+        // }
+        if($data->renewal_status == 0){
+            $invoice_labels .= "<span class='mt0 label label-info large ml10 clickable'  title='Live' style='background-color:green;'>Live</span>";
+        } else {
+            $invoice_labels .= "<span class='mt0 label label-info large ml10 clickable'  title='Lost' style='background-color:red;'>Lost</span>";
         }
 
 
@@ -540,6 +545,7 @@ class Invoices extends MY_Controller {
             // to_currency($data->payment_received, $data->currency_symbol),
             // to_currency($due, $data->currency_symbol),
             // $this->_get_invoice_status_label($data) . $invoice_labels,
+            $invoice_labels,
             // $entry,
         );
 

@@ -47,7 +47,8 @@
                 // {title: "<?php echo lang("invoice_value") ?>", "class": "w10p text-right"},
                 // {title: "<?php echo lang("payment_received") ?>", "class": "w10p text-right"},
                 // {title: "<?php echo lang("due") ?>", "class": "w10p text-right"},
-                {title: '<?php echo lang("status") ?>', "class": "w10p text-center"}
+                {title: '<?php echo lang("status") ?>', "class": "w10p text-center"},
+                {title: '<i class="fa fa-bars"></i>', "class": "text-center dropdown-option w100"}
                 <?php echo $custom_field_headers; ?>
             ],
             printColumns: combineCustomFieldsColumns([0, 2, 4, 6, 7, 8, 9], '<?php echo $custom_field_headers; ?>'),

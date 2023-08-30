@@ -74,7 +74,7 @@ class Invoice_payments extends MY_Controller {
 
             $view_data['invoices_dropdown'] = array("" => "-") + $invoices_dropdown;
         }
-        $view_data['renewal_status_dropdown'] = array("0" => "Continue") + array("1" => "Lost");
+        $view_data['renewal_status_dropdown'] = array("0" => "Live") + array("1" => "Lost");
 
         $view_data['payment_methods_dropdown'] = $this->Payment_methods_model->get_dropdown_list(array("title"), "id", array("online_payable" => 0, "deleted" => 0));
         $view_data['invoice_id'] = $invoice_id;
