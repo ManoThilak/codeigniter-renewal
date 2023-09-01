@@ -148,7 +148,7 @@ class Clients extends MY_Controller {
 
         validate_submitted_data(array(
             "id" => "numeric",
-            "email" => "valid_email",
+            // "email" => "valid_email",
             // "scompany_name" => "required",
             // "address" => "required",
             // "sphone" => "required",
@@ -237,16 +237,16 @@ class Clients extends MY_Controller {
 
 
         //check duplicate company name, if found then show an error message
-        if (get_setting("disallow_duplicate_client_company_name") == "1" && $this->Clients_model->is_duplicate_company_name($data["company_name"], $client_id)) {
-            echo json_encode(array("success" => false, 'message' => lang("account_already_exists_for_your_company_name")));
-            exit();
-        }
+        // if (get_setting("disallow_duplicate_client_company_name") == "1" && $this->Clients_model->is_duplicate_company_name($data["company_name"], $client_id)) {
+        //     echo json_encode(array("success" => false, 'message' => lang("account_already_exists_for_your_company_name")));
+        //     exit();
+        // }
         
-        $email = $this->input->post('email');
-        if ($this->Clients_model->is_email_exists($email, $client_id)) {
-            echo json_encode(array("success" => false, 'message' => lang("account_already_exists_for_your_mail")));
-                    return false;
-        }
+        // $email = $this->input->post('email');
+        // if ($this->Clients_model->is_email_exists($email, $client_id)) {
+        //     echo json_encode(array("success" => false, 'message' => lang("account_already_exists_for_your_mail")));
+        //             return false;
+        // }
         $save_id = $this->Clients_model->save($data, $client_id);
 
 
@@ -577,9 +577,9 @@ class Clients extends MY_Controller {
 
             // anchor(get_uri("clients/view/" . $data->id), $data->company_name),
             $com,
-            $data->client_name,
+            // $data->client_name,
             $data->phone,
-            $data->state,
+            // $data->state,
             $data->city,
             // $data->primary_contact ? $primary_contact : "",
             // $group_list,

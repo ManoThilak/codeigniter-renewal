@@ -17,7 +17,7 @@
         ?>
     </div>
 </div>
-<div class="form-group">
+<!-- <div class="form-group">
     <label for="client_name" class="<?php echo $label_column; ?>"><?php echo lang('client_name'); ?><small class="req"> *</small></label>
     <div class="<?php echo $field_column; ?>">
         <?php
@@ -32,7 +32,7 @@
             ));
         ?>
     </div>
-</div>
+</div> -->
 <div class="form-group">
     <label for="phone" class="<?php echo $label_column; ?>"><?php echo lang('phone'); ?><small class="req"> *</small></label>
     <div class="<?php echo $field_column; ?>">
@@ -79,7 +79,7 @@
             ?>
         </div>
     </div>
-<div class="form-group">
+<!-- <div class="form-group">
     <label for="email" class="<?php echo $label_column; ?>"><?php echo lang('email'); ?></label>
     <div class="<?php echo $field_column; ?>">
         <?php
@@ -96,7 +96,7 @@
             ));
         ?>
     </div>
-</div>
+</div> -->
 
 
 
@@ -130,7 +130,7 @@
             ?>
     </div>
 </div>  -->
-<div class="form-group">
+<!-- <div class="form-group">
     <label for="vat_number" class="<?php echo $label_column; ?>"><?php echo lang('vat_number'); ?></label>
     <div class="<?php echo $field_column; ?>">
         <?php
@@ -143,7 +143,7 @@
         ));
         ?>
     </div>
-</div>
+</div> -->
 
 
 
@@ -170,7 +170,7 @@
     </div>
 </div>
  -->
-<div class="form-group">
+<!-- <div class="form-group">
     <label for="address" class="<?php echo $label_column; ?>"><?php echo lang('address'); ?></label>
     <div class="<?php echo $field_column; ?>">
         <?php
@@ -186,7 +186,7 @@
         ?>
 
     </div>
-</div>
+</div> -->
 <!-- <div class="form-group">
     <label for="city" class="<?php echo $label_column; ?>"><?php echo lang('city'); ?><small class="req"> *</small></label>
     <div class="<?php echo $field_column; ?>">
@@ -219,7 +219,7 @@
         ?>
     </div>
 </div> -->
-<div class="form-group">
+<!-- <div class="form-group">
     <label for="zip" class="<?php echo $label_column; ?>"><?php echo lang('zip'); ?></label>
     <div class="<?php echo $field_column; ?>">
         <?php
@@ -234,7 +234,7 @@
         ));
         ?>
     </div>
-</div>
+</div> -->
 <div class="form-group">
     <!-- <label for="sphone" class="<?php echo $label_column; ?>"><?php echo lang('phone'); ?><small class="req"> *</small></label>
     <div class="<?php echo $field_column; ?>">

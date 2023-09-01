@@ -433,6 +433,7 @@ class Left_menu {
 
             if ($access_items && (get_setting("module_invoice") == "1" || get_setting("module_estimate") == "1" )) {
                 $sidebar_menu["items"] = array("name" => "items", "url" => "items", "class" => "fa-list-ul");
+                $sidebar_menu["bcategory"] = array("name" => "bcategory", "url" => "bcategory", "class" => "fa-list-ul");
             }
 
              $sidebar_menu["invoices"] = array("name" => "invoices", "url" => "invoices", "class" => "fa-money");
@@ -564,36 +565,36 @@ class Left_menu {
                 $reports_url = "";
                 
 
-                if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_invoice)) {
-                    $reports_submenu[] = array("name" => "income_vs_expenses", "url" => "expenses/income_vs_expenses", "class" => "fa-money");
-                    //$reports_url = "invoice_payments";
+                // if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_invoice)) {
+                //     $reports_submenu[] = array("name" => "income_vs_expenses", "url" => "expenses/income_vs_expenses", "class" => "fa-money");
+                //     //$reports_url = "invoice_payments";
                    
-                }
-                if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_couriersent || $access_courier)) {
-                    $reports_submenu[] = array("name" => "courier_report", "url" => "couriersent/cindex", "class" => "fa-money");
-                    //$reports_url = "invoice_payments";
+                // }
+                // if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_couriersent || $access_courier)) {
+                //     $reports_submenu[] = array("name" => "courier_report", "url" => "couriersent/cindex", "class" => "fa-money");
+                //     //$reports_url = "invoice_payments";
                    
-                }
-                if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_telecallers )) {
-                    $reports_submenu[] = array("name" => "tele_report", "url" => "mtelemarketers/cindex", "class" => "fa-money");
-                    //$reports_url = "invoice_payments";
+                // }
+                // if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_telecallers )) {
+                //     $reports_submenu[] = array("name" => "tele_report", "url" => "mtelemarketers/cindex", "class" => "fa-money");
+                //     //$reports_url = "invoice_payments";
                    
-                }
-                if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_salesmanager )) {
-                    $reports_submenu[] = array("name" => "salesmanagerc", "url" => "salesmancom", "class" => "fa-money");
-                    //$reports_url = "invoice_payments";
+                // }
+                // if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_salesmanager )) {
+                //     $reports_submenu[] = array("name" => "salesmanagerc", "url" => "salesmancom", "class" => "fa-money");
+                //     //$reports_url = "invoice_payments";
                    
-                }
-                if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_stock )) {
-                    $reports_submenu[] = array("name" => "stockrep", "url" => "stockrep", "class" => "fa-money");
-                    //$reports_url = "invoice_payments";
+                // }
+                // if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_stock )) {
+                //     $reports_submenu[] = array("name" => "stockrep", "url" => "stockrep", "class" => "fa-money");
+                //     //$reports_url = "invoice_payments";
                    
-                }
-                if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_giftpack )) {
-                    $reports_submenu[] = array("name" => "giftrep", "url" => "courier/cindex", "class" => "fa-money");
-                    //$reports_url = "invoice_payments";
+                // }
+                // if (get_setting("module_invoice") == "1" && ($this->ci->login_user->is_admin || $access_giftpack )) {
+                //     $reports_submenu[] = array("name" => "giftrep", "url" => "courier/cindex", "class" => "fa-money");
+                //     //$reports_url = "invoice_payments";
                    
-                }
+                // }
 
                  
 
@@ -614,7 +615,13 @@ class Left_menu {
                 //     $finance_submenu[] = array("name" => "income_vs_expenses", "url" => "expenses/income_vs_expenses", "class" => "fa-line-chart");
                 // }
 
-              ////////  // $sidebar_menu["reports"] = array("name" => "reports", "url" => $reports_url, "class" => "fa fa-line-chart ftlayer", "submenu" => $reports_submenu);
+            $reports_submenu[] = array("name" => "follow_report", "url" => "invoices/followup", "class" => "fa-money");
+
+            $reports_submenu[] = array("name" => "expiry_report", "url" => "invoices/expiry", "class" => "fa-money");
+
+            $reports_submenu[] = array("name" => "portfolio", "url" => "invoices/portfolio", "class" => "fa-money");
+
+              $sidebar_menu["reports"] = array("name" => "reports", "url" => $reports_url, "class" => "fa fa-line-chart ftlayer", "submenu" => $reports_submenu);
             }
 
 

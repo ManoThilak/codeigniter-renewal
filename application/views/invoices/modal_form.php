@@ -222,7 +222,7 @@
         </div>
 
     </div>  
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label for="invoice_note" class=" col-md-3"><?php echo lang('note'); ?></label>
         <div class=" col-md-9">
             <?php
@@ -236,7 +236,7 @@
             ));
             ?>
         </div>
-    </div>
+    </div> -->
     <div class="form-group">
         <label for="invoice_labels" class=" col-md-3"><?php echo lang('labels'); ?></label>
         <div class=" col-md-9">
@@ -251,6 +251,20 @@
             ?>
         </div>
     </div>
+    <!-- <div class="form-group">
+        <label for="lead_labels" class="col-md-3"><?php echo lang('labels'); ?></label>
+        <div class="col-md-9">
+            <?php
+            echo form_input(array(
+                "id" => "lead_labels",
+                "name" => "labels",
+                "value" => $model_info->labels,
+                "class" => "form-control",
+                "placeholder" => lang('labels')
+            ));
+            ?>
+        </div>
+    </div> -->
 
     <?php $this->load->view("custom_fields/form/prepare_context_fields", array("custom_fields" => $custom_fields, "label_column" => "col-md-3", "field_column" => " col-md-9")); ?> 
 
@@ -322,9 +336,10 @@
         $("#invoice-form .entry-select2").select2();
         $("#repeat_type").select2();
 
-        $("#invoice_labels").select2({
-            tags: <?php echo json_encode($label_suggestions); ?>
-        });
+        // $("#invoice_labels").select2({
+        //     tags: <?php echo json_encode($label_suggestions); ?>
+        // });
+        $("#invoice_labels").select2({multiple: true, data: <?php echo json_encode($label_suggestions); ?>});
 
         setDatePicker("#invoice_bill_date, #invoice_due_date");
 

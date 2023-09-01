@@ -200,6 +200,7 @@ $autoload['model'] = array(
     'Couriersent_model',
     'Giftfor_master_model',
     'City_model',
-    'State_model'
+    'State_model',
+    'Bcategory_model'
 );
 

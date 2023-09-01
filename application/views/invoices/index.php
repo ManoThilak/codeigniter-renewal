@@ -1,7 +1,7 @@
 <div id="page-content" class="clearfix p20">
     <div class="panel clearfix">
         <ul id="invoices-tabs" data-toggle="ajax-tab" class="nav nav-tabs bg-white title" role="tablist">
-            <li class="title-tab"><h4 class="pl15 pt10 pr15"><?php echo lang("invoices"); ?></h4></li>
+            <li class="title-tab"><h4 class="pl15 pt10 pr15"><?php echo lang($title); ?></h4></li>
 
             <li><a role="presentation" href="<?php echo_uri("invoices/all_invoice/"); ?>" data-target="#all-invoices">All</a></li>
 
@@ -15,7 +15,9 @@
             <div class="tab-title clearfix no-border">
                 <div class="title-button-group">
                     <?php // echo modal_anchor(get_uri("invoice_payments/payment_modal_form"), "<i class='fa fa-plus-circle'></i> " . lang('add_payment'), array("class" => "btn btn-default mb0", "title" => lang('add_payment'))); ?>
-                    <?php echo modal_anchor(get_uri("invoices/modal_form"), "<i class='fa fa-plus-circle'></i> " . lang('add_invoice'), array("class" => "btn btn-default mb0", "title" => lang('add_invoice'))); ?>
+                    <?php if($title == "invoices") {
+                     echo modal_anchor(get_uri("invoices/modal_form"), "<i class='fa fa-plus-circle'></i> " . lang('add_invoice'), array("class" => "btn btn-default mb0", "title" => lang('add_invoice'))); 
+                    } ?>
                 </div>
             </div>
         </ul>
@@ -44,11 +46,17 @@
     } else if (dateRange === "all") {
     dateRange = "";
     }
+    var sta ="<?php echo $title; ?>";
+    if( sta == "invoices" || sta == "follow_report") {
+        var link = '<?php echo_uri("invoices/list_data"); ?>'
+    } else if( sta == "expiry_report" ) {
+        var link = '<?php echo_uri("invoices/list_data_expiry"); ?>'
+    } 
 
     $(selector).appTable({
-    source: '<?php echo_uri("invoices/list_data") ?>',
+    source: link,
             dateRangeType: dateRange,
-            order: [[8, "desc"]],
+            order: [[9, "desc"]], // Update THIS WHEN ADD COLUMN(ENTER LAST COLUMN)
             filterDropdown: [
             {name: "status", class: "w150", options: <?php $this->load->view("invoices/invoice_statuses_dropdown"); ?>},
             <?php if ($currencies_dropdown) { ?>
@@ -57,30 +65,33 @@
             ],
             rangeDatepicker: customDatePicker,
             columns: [
-            {title: "<?php echo lang("invoice_id") ?>", "class": "w10p"},
+            {title: "ID", "class": "w5p"},
             {title: "<?php echo lang("client") ?>", "class": ""},
             //{title: "<?php echo lang("project") ?>", "class": "w15p"},
             // {visible: false, searchable: false},
-            {title: "<?php echo lang("bill_date") ?>", "class": "w10p", "iDataSort": 3},
+            // {title: "<?php echo lang("bill_date") ?>", "class": "w10p", "iDataSort": 3},
             // {visible: false, searchable: false},
             {title: "<?php echo lang("due_date") ?>", "class": "w10p", "iDataSort": 5},
             // {visible: false, searchable: false},
             {title: "<?php echo lang("domain_name") ?>", "class": "w15p"},
-
-            {title: "<?php echo lang("next_followupdate") ?>", "class": "w15p", "iDataSort": 5},
+            {title: "<?php echo lang("total") ?>", "class": "w10p text-right"},
+            {title: "D <?php echo lang("status") ?>", "class": "w5p text-center"},
+            {title: "<?php echo lang("next_followupdate") ?>", "class": "w10p", "iDataSort": 5},
             // {visible: false, searchable: false},
-            {title: "<?php echo lang("items") ?>", "class": ""},
+            
             // {title: "<?php echo lang("invoice_value") ?>", "class": "w10p text-right"},
             // {title: "<?php echo lang("payment_received") ?>", "class": "w10p text-right"},
             // {title: "<?php echo lang("due") ?>", "class": "w10p text-right"},
-            {title: "<?php echo lang("status") ?>", "class": "w5p text-center"}
+            {title: "F <?php echo lang("status") ?>", "class": "w5p text-center"},
+            {title: "<?php echo lang("items") ?>", "class": ""}
             // {title: "<?php echo lang("entry_by") ?>", "class": ""}
 <?php echo $custom_field_headers; ?>,
-            {title: '<i class="fa fa-bars"></i>', "class": "text-center dropdown-option w100"}
+            {title: '<i class="fa fa-bars"></i>', "class": "text-center dropdown-option w50"}
             ],
             printColumns: combineCustomFieldsColumns([0, 1, 2, 3, 5, 7, 8, 9], '<?php echo $custom_field_headers; ?>'),
             xlsColumns: combineCustomFieldsColumns([0, 1, 2, 3, 5, 7, 8, 9], '<?php echo $custom_field_headers; ?>'),
             // summation: [{column: 6, dataType: 'number'},{column: 7, dataType: 'number'}, {column: 8, dataType: 'number'}]
+            summation: [{column: 4, dataType: 'number'}]
     });
     };
     $(document).ready(function () {

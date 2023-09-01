@@ -590,3 +590,11 @@ alter table clients add `domain_name` varchar(100) DEFAULT NULL;
 alter table invoices add `renewal_status` int(11) NOT NULL DEFAULT 0;
 alter table invoices add `next_followup_date` date DEFAULT NULL;
 alter table invoice_payments add `renewal_status` int(11) NOT NULL DEFAULT 0;
+
+CREATE TABLE `bcategory` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
+   `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci

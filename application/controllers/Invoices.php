@@ -19,7 +19,7 @@ class Invoices extends MY_Controller {
 
         if ($this->login_user->user_type === "staff") {
             $this->access_only_allowed_members();
-
+            $view_data['title'] = "invoices";
             $view_data["currencies_dropdown"] = $this->_get_currencies_dropdown();
 
             $this->template->rander("invoices/index", $view_data);
@@ -28,6 +28,123 @@ class Invoices extends MY_Controller {
             $view_data['client_id'] = $this->login_user->client_id;
             $view_data['page_type'] = "full";
             $this->template->rander("clients/invoices/index", $view_data);
+        }
+    }
+
+    function followup() {
+        $this->check_module_availability("module_invoice");
+
+        $view_data["custom_field_headers"] = $this->Custom_fields_model->get_custom_field_headers_for_table("invoices", $this->login_user->is_admin, $this->login_user->user_type);
+
+        if ($this->login_user->user_type === "staff") {
+            $this->access_only_allowed_members();
+            $view_data['title'] = "follow_report";
+            $view_data["currencies_dropdown"] = $this->_get_currencies_dropdown();
+
+            $this->template->rander("invoices/index", $view_data);
+        } else {
+            $view_data["client_info"] = $this->Clients_model->get_one($this->login_user->client_id);
+            $view_data['client_id'] = $this->login_user->client_id;
+            $view_data['page_type'] = "full";
+            $this->template->rander("clients/invoices/index", $view_data);
+        }
+    }
+
+    function expiry() {
+        $this->check_module_availability("module_invoice");
+
+        $view_data["custom_field_headers"] = $this->Custom_fields_model->get_custom_field_headers_for_table("invoices", $this->login_user->is_admin, $this->login_user->user_type);
+
+        if ($this->login_user->user_type === "staff") {
+            $this->access_only_allowed_members();
+            $view_data['title'] = "expiry_report";
+            $view_data["currencies_dropdown"] = $this->_get_currencies_dropdown();
+
+            $this->template->rander("invoices/index", $view_data);
+        } else {
+            $view_data["client_info"] = $this->Clients_model->get_one($this->login_user->client_id);
+            $view_data['client_id'] = $this->login_user->client_id;
+            $view_data['page_type'] = "full";
+            $this->template->rander("clients/invoices/index", $view_data);
+        }
+    }
+
+    function portfolio() {
+        $this->check_module_availability("module_invoice");
+
+        $view_data["custom_field_headers"] = $this->Custom_fields_model->get_custom_field_headers_for_table("invoices", $this->login_user->is_admin, $this->login_user->user_type);
+
+        if ($this->login_user->user_type === "staff") {
+            $this->access_only_allowed_members();
+            $view_data['title'] = "portfolio";
+            $view_data["currencies_dropdown"] = $this->_get_currencies_dropdown();
+            $view_data["state_dropdown"] = $this->get_state_dropdown();
+            $view_data["city_dropdown"] = $this->get_city_dropdown();
+            $view_data["bcategory_dropdown"] = $this->get_bcategory_dropdown();
+
+            $this->template->rander("invoices/portfolio", $view_data);
+        } else {
+            $view_data["client_info"] = $this->Clients_model->get_one($this->login_user->client_id);
+            $view_data['client_id'] = $this->login_user->client_id;
+            $view_data['page_type'] = "full";
+            $this->template->rander("clients/invoices/index", $view_data);
+        }
+    }
+
+    function get_state_dropdown() {
+        $used_currencies = $this->State_model->get_details()->result();
+
+        if ($used_currencies) {
+            $default_currency = get_setting("default_currency");
+
+            $currencies_dropdown = array(
+                array("id" => "", "text" => "- " . lang("state") . " -")
+              //  array("id" => $default_currency, "text" => $default_currency) // add default currency
+            );
+
+            foreach ($used_currencies as $currency) {
+                $currencies_dropdown[] = array("id" => $currency->id, "text" => $currency->title);
+            }
+
+            return json_encode($currencies_dropdown);
+        }
+    }
+
+    function get_city_dropdown() {
+        $used_currencies = $this->City_model->get_details()->result();
+
+        if ($used_currencies) {
+            $default_currency = get_setting("default_currency");
+
+            $currencies_dropdown = array(
+                array("id" => "", "text" => "- " . lang("city") . " -")
+              //  array("id" => $default_currency, "text" => $default_currency) // add default currency
+            );
+
+            foreach ($used_currencies as $currency) {
+                $currencies_dropdown[] = array("id" => $currency->id, "text" => $currency->title);
+            }
+
+            return json_encode($currencies_dropdown);
+        }
+    }
+
+    function get_bcategory_dropdown() {
+        $used_currencies = $this->Bcategory_model->get_details()->result();
+
+        if ($used_currencies) {
+            $default_currency = get_setting("default_currency");
+
+            $currencies_dropdown = array(
+                array("id" => "", "text" => "- " . lang("bcategory") . " -")
+              //  array("id" => $default_currency, "text" => $default_currency) // add default currency
+            );
+
+            foreach ($used_currencies as $currency) {
+                $currencies_dropdown[] = array("id" => $currency->id, "text" => $currency->title);
+            }
+
+            return json_encode($currencies_dropdown);
         }
     }
 
@@ -156,6 +273,8 @@ class Invoices extends MY_Controller {
             $label_suggestions = array("0" => "");
         }
         $view_data['label_suggestions'] = $label_suggestions;
+        //prepare label suggestions
+        $view_data['label_suggestions'] = $this->make_labels_dropdown("client");
 
         //clone invoice
         $is_clone = $this->input->post('is_clone');
@@ -168,6 +287,47 @@ class Invoices extends MY_Controller {
         $this->load->view('invoices/modal_form', $view_data);
     }
 
+ function make_labels_dropdown($type = "", $label_ids = "", $is_filter = false, $custom_filter_title = "") {
+        if (!$type) {
+            show_404();
+        }
+
+        $labels_dropdown = $is_filter ? array(array("id" => "", "text" => "- " . ($custom_filter_title ? $custom_filter_title : app_lang("label")) . " -")) : array();
+
+        $options = array(
+            "context" => $type
+        );
+
+        if ($type == "event" || $type == "note" || $type == "to_do") {
+            $options["user_id"] = $this->login_user->id;
+        }
+
+        if ($label_ids) {
+            $add_label_option = true;
+
+            //check if any string is exists, 
+            //if so, not include this parameter
+            $explode_ids = explode(',', $label_ids);
+            foreach ($explode_ids as $label_id) {
+                if (!is_int($label_id)) {
+                    $add_label_option = false;
+                    break;
+                }
+            }
+
+            if ($add_label_option) {
+                $options["label_ids"] = $label_ids; //to edit labels where have access of others
+            }
+        }
+
+
+        $labels = $this->Bcategory_model->get_details()->result();
+        foreach ($labels as $label) {
+            $labels_dropdown[] = array("id" => $label->id, "text" => $label->title);
+        }
+
+        return $labels_dropdown;
+    }
     /* prepare project dropdown based on this suggestion */
 
     function get_project_suggestion($client_id = 0) {
@@ -221,15 +381,17 @@ class Invoices extends MY_Controller {
             "note" => $this->input->post('invoice_note'),
             "entry_id" => $this->input->post('entry_id'),
             "domain_name" => $this->input->post('domain_name'),
-            "labels" => $this->input->post('labels'),
-            "next_followup_date" => get_current_utc_time()
+            "labels" => $this->input->post('labels')
+            // "next_followup_date" => get_current_utc_time()
 
         );
 
         $client_infos = $this->Clients_model->get_one($client_id);
         //$salesmanager_id = $client_infos->salesmanager_id;
         $invoice_data["salesmanager_id"] = $client_infos->salesmanager_id;;
-        
+        if (!$id) {
+            $invoice_data["next_followup_date"] = get_current_utc_time();
+        }
 
 
         $is_clone = $this->input->post('is_clone');
@@ -395,6 +557,86 @@ class Invoices extends MY_Controller {
         echo json_encode(array("data" => $result));
     }
 
+    function list_data_expiry() {
+        $this->access_only_allowed_members();
+
+        $custom_fields = $this->Custom_fields_model->get_available_fields_for_table("invoices", $this->login_user->is_admin, $this->login_user->user_type);
+
+
+
+        if ($this->login_user->salesmanager_id === "0") {
+            $options = array(
+            "status" => $this->input->post("status"),
+            "start_date" => $this->input->post("start_date"),
+            "end_date" => $this->input->post("end_date"),
+            "currency" => $this->input->post("currency"),
+            "custom_fields" => $custom_fields
+        );
+        } else {
+
+            $salesmanager_id = $this->login_user->salesmanager_id;
+            $options = array(
+            "status" => $this->input->post("status"),
+            "start_date" => $this->input->post("start_date"),
+            "end_date" => $this->input->post("end_date"),
+            "currency" => $this->input->post("currency"),
+            "salesmanager_id" => $salesmanager_id,
+            "custom_fields" => $custom_fields
+        );
+        }
+
+        $list_data = $this->Invoices_model->get_details_expiry($options)->result();
+        $result = array();
+        foreach ($list_data as $data) {
+            $result[] = $this->_make_row($data, $custom_fields);
+        }
+
+        echo json_encode(array("data" => $result));
+    }
+    function list_data_portfolio() {
+        $this->access_only_allowed_members();
+
+        $custom_fields = $this->Custom_fields_model->get_available_fields_for_table("invoices", $this->login_user->is_admin, $this->login_user->user_type);
+        // if ($this->login_user->salesmanager_id === "0") {
+        //     $options = array(
+        //     "status" => $this->input->post("status"),
+        //     "start_date" => $this->input->post("start_date"),
+        //     "end_date" => $this->input->post("end_date"),
+        //     "currency" => $this->input->post("currency"),
+        //     "custom_fields" => $custom_fields
+        // );
+        // } else {
+
+        //     $salesmanager_id = $this->login_user->salesmanager_id;
+        //     $options = array(
+        //     "status" => $this->input->post("status"),
+        //     "start_date" => $this->input->post("start_date"),
+        //     "end_date" => $this->input->post("end_date"),
+        //     "currency" => $this->input->post("currency"),
+        //     "salesmanager_id" => $salesmanager_id,
+        //     "custom_fields" => $custom_fields
+        // );
+        // }
+        $options = array(
+            "status" => $this->input->post("status"),
+            "start_date" => $this->input->post("start_date"),
+            "end_date" => $this->input->post("end_date"),
+            "currency" => $this->input->post("currency"),
+            "state_id" => $this->input->post("state_id"),
+            "city_id" => $this->input->post("city_id"),
+            "bcategory_id" => $this->input->post("bcategory_id"),
+            "custom_fields" => $custom_fields
+        );
+
+        $list_data = $this->Invoices_model->get_details_portfolio($options)->result();
+        $result = array();
+        foreach ($list_data as $data) {
+            $result[] = $this->_make_row_portfolio($data, $custom_fields);
+        }
+
+        echo json_encode(array("data" => $result));
+    }
+
     /* list of invoice of a specific client, prepared for datatable  */
 
     function invoice_list_data_of_client($client_id) {
@@ -516,16 +758,32 @@ class Invoices extends MY_Controller {
             $invoice_labels .= "<span class='mt0 label label-info large ml10 clickable'  title='Lost' style='background-color:red;'>Lost</span>";
         }
 
+        $event_date = date('Y-m-d', strtotime($data->next_followup_date));
+        $current_date = date('Y-m-d');
+        //$today = date('Y-m-d');
 
-        $entry = "";
-        if($data->entry_id){
-
-            $entry = $data->entry_id;
+        if ($event_date === $current_date) {
+            // $status_type = "Ongoing"; // Today
+            // $status_color = "green";
+            $fstatus .= "<span class='mt0 label label-info large ml10 clickable'  title='Ongoing' style='background-color:#2ed900;'>Ongoing</span>";
+        } elseif ($event_date <= $current_date) {
+            // $status_type = "Overdue"; // Yesterday
+            // $status_color = "red";
+            $fstatus .= "<span class='mt0 label label-info large ml10 clickable'  title='Overdue' style='background-color:#b30002;'>Overdue</span>";
+        } elseif ($event_date >= $current_date) {
+           // $status_type = "Upcoming"; // Tomorrow
+           // $status_color = "#0014ff";
+            $fstatus .= "<span class='mt0 label label-info large ml10 clickable'  title='Upcoming' style='background-color:#0196d9;'>Upcoming</span>";
         } 
 
-        if($data->entry_idd) {
-            $entry = $data->entry_idd;
-        }
+
+        // $entry = "";
+        // if($data->entry_id){
+        //     $entry = $data->entry_id;
+        // } 
+        // if($data->entry_idd) {
+        //     $entry = $data->entry_idd;
+        // }
 
 
 
@@ -534,18 +792,22 @@ class Invoices extends MY_Controller {
             anchor(get_uri("clients/view/" . $data->client_id), $data->company_name),
             //$data->project_title ? anchor(get_uri("projects/view/" . $data->project_id), $data->project_title) : "-",
             // $data->bill_date,
-            format_to_date($data->bill_date, false),
+            // format_to_date($data->bill_date, false),
             // $data->due_date,
             format_to_date($data->due_date, false),
             $data->domain_name,
+            
+            to_currency($data->total_amt, $data->currency_symbol),
+            $invoice_labels,
             // $data->next_followup_date,
             format_to_date($data->next_followup_date, false),
+            $fstatus,
             $data->combined_titles,
             // to_currency($data->invoice_value, $data->currency_symbol),
             // to_currency($data->payment_received, $data->currency_symbol),
             // to_currency($due, $data->currency_symbol),
             // $this->_get_invoice_status_label($data) . $invoice_labels,
-            $invoice_labels,
+            
             // $entry,
         );
 
@@ -555,6 +817,101 @@ class Invoices extends MY_Controller {
         }
 
         $row_data[] = $this->_make_options_dropdown($data->id);
+
+        return $row_data;
+    } 
+
+    private function _make_row_portfolio($data, $custom_fields) {
+        $invoice_url = "";
+        if ($this->login_user->user_type == "staff") {
+            $invoice_url = anchor(get_uri("invoices/view/" . $data->id), get_invoice_id($data->id));
+        } else {
+            $invoice_url = anchor(get_uri("invoices/preview/" . $data->id), get_invoice_id($data->id));
+        }
+
+        
+        $due = 0;
+        if ($data->invoice_value) {
+            $due = ignor_minor_value($data->invoice_value - $data->payment_received);
+        }
+
+
+
+        $invoice_labels = "";
+        // if ($data->labels) {
+        //     $labels = explode(",", $data->labels);
+        //     foreach ($labels as $label) {
+        //         $invoice_labels .= "<span class='mt0 label label-info large ml10 clickable'  title='$label'>" . $label . "</span>";
+        //     }
+        // }
+        if($data->renewal_status == 0){
+            $invoice_labels .= "<span class='mt0 label label-info large ml10 clickable'  title='Live' style='background-color:green;'>Live</span>";
+        } else {
+            $invoice_labels .= "<span class='mt0 label label-info large ml10 clickable'  title='Lost' style='background-color:red;'>Lost</span>";
+        }
+
+        $event_date = date('Y-m-d', strtotime($data->next_followup_date));
+        $current_date = date('Y-m-d');
+        //$today = date('Y-m-d');
+
+        if ($event_date === $current_date) {
+            // $status_type = "Ongoing"; // Today
+            // $status_color = "green";
+            $fstatus .= "<span class='mt0 label label-info large ml10 clickable'  title='Ongoing' style='background-color:#2ed900;'>Ongoing</span>";
+        } elseif ($event_date <= $current_date) {
+            // $status_type = "Overdue"; // Yesterday
+            // $status_color = "red";
+            $fstatus .= "<span class='mt0 label label-info large ml10 clickable'  title='Overdue' style='background-color:#b30002;'>Overdue</span>";
+        } elseif ($event_date >= $current_date) {
+           // $status_type = "Upcoming"; // Tomorrow
+           // $status_color = "#0014ff";
+            $fstatus .= "<span class='mt0 label label-info large ml10 clickable'  title='Upcoming' style='background-color:#0196d9;'>Upcoming</span>";
+        } 
+
+
+        // $entry = "";
+        // if($data->entry_id){
+        //     $entry = $data->entry_id;
+        // } 
+        // if($data->entry_idd) {
+        //     $entry = $data->entry_idd;
+        // }
+
+
+
+
+        $row_data = array($invoice_url,
+            anchor(get_uri("clients/view/" . $data->client_id), $data->company_name),
+            //$data->project_title ? anchor(get_uri("projects/view/" . $data->project_id), $data->project_title) : "-",
+            // $data->bill_date,
+            // format_to_date($data->bill_date, false),
+            // $data->due_date,
+            // format_to_date($data->due_date, false),
+            $data->state,
+            $data->city,
+            $data->domain_name,
+            
+            // to_currency($data->total_amt, $data->currency_symbol),
+            // $invoice_labels,
+            // $data->next_followup_date,
+            // format_to_date($data->next_followup_date, false),
+            // $fstatus,
+            $data->combined_titles,
+            $data->bcategory,
+            // to_currency($data->invoice_value, $data->currency_symbol),
+            // to_currency($data->payment_received, $data->currency_symbol),
+            // to_currency($due, $data->currency_symbol),
+            // $this->_get_invoice_status_label($data) . $invoice_labels,
+            
+            // $entry,
+        );
+
+        foreach ($custom_fields as $field) {
+            $cf_id = "cfv_" . $field->id;
+            $row_data[] = $this->load->view("custom_fields/output_" . $field->field_type, array("value" => $data->$cf_id), true);
+        }
+
+        // $row_data[] = $this->_make_options_dropdown($data->id);
 
         return $row_data;
     }
@@ -717,7 +1074,7 @@ class Invoices extends MY_Controller {
             "title" => $this->input->post('invoice_item_title'),
             "description" => $this->input->post('invoice_item_description'),
             "quantity" => $quantity,
-            "unit_type" => $this->input->post('invoice_unit_type'),
+            // "unit_type" => $this->input->post('invoice_unit_type'),
             "rate" => unformat_currency($this->input->post('invoice_item_rate')),
             "total" => $rate * $quantity,
         );

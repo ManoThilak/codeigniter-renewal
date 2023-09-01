@@ -19,10 +19,10 @@
             source: '<?php echo_uri("items/list_data") ?>',
             order: [[0, 'desc']],
             columns: [
-                {title: "<?php echo lang('title') ?> ", "class": "w20p"},
-                {title: "<?php echo lang('description') ?>"},
-                {title: "<?php echo lang('unit_type') ?>", "class": "w100"},
-                {title: "<?php echo lang('rate') ?>", "class": "text-right w100"},
+                {title: "<?php echo lang('title') ?> "},
+                // {title: "<?php echo lang('description') ?>"},
+                // {title: "<?php echo lang('unit_type') ?>", "class": "w100"},
+                {title: "<?php echo lang('rate') ?>"},
                 {title: "<i class='fa fa-bars'></i>", "class": "text-center option w100"}
             ],
             printColumns: [0, 1, 2, 3],
