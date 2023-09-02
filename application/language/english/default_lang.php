@@ -1732,3 +1732,13 @@ $lang["delete_bcategory"] = "Delete Business Category";
 $lang["follow_report"] = "Followup Date Report";
 $lang["expiry_report"] = "Expiry Date Report";
 $lang["portfolio"] = "Portfolio";
+
+$lang["city"] = "City";
+$lang["add_city"] = "Add City";
+$lang["edit_city"] = "Edit City";
+$lang["delete_city"] = "Delete City";
+
+$lang["add_state"] = "Add State";
+$lang["edit_state"] = "Edit State";
+$lang["delete_state"] = "Delete State";
+$lang["master"] = "Master";

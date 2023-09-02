@@ -136,6 +136,10 @@
                     <table id="invoice-payment-table" class="display" cellspacing="0" width="100%">            
                     </table>
                 </div>
+                <div style="display:flex;justify-content: center;">
+                   <button type="button" style="font-weight: bold;" onclick="goBack()" class="btn btn-default mb0" ><i class='fa fa-arrow-left'></i>  Back to Renewal</button> 
+                </div>
+                
             </div>
         <?php } ?>
     </div>
@@ -276,7 +280,10 @@
     window.onafterprint = function () {
         location.reload();
     };
-
+    function goBack() {
+        // history.back();
+         window.location.href = "<?php echo get_uri('invoices') ?>";
+    }
 </script>
 
 <?php

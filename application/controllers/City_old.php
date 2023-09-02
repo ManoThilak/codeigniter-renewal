@@ -22,7 +22,6 @@ class City extends MY_Controller {
         ));
 
         $view_data['model_info'] = $this->City_model->get_one($this->input->post('id'));
-        $view_data['state_dropdown'] = array("" => "-") + $this->State_model->get_dropdown_list(array("title"), "id", array("deleted" => 0));
         $this->load->view('city/modal_form', $view_data);
     }
 
@@ -37,8 +36,7 @@ class City extends MY_Controller {
         $id = $this->input->post('id');
         $data = array(
             "title" => $this->input->post('title'),
-            "state_id" => $this->input->post('state_id'),
-            // "description" => $this->input->post('description'),
+            "description" => $this->input->post('description'),
              //"created_at" => get_current_utc_time()
         );
 
@@ -48,7 +46,7 @@ class City extends MY_Controller {
 
             // $this->validate_access_to_note($godown_info, true);
         } else {
-            // $data['created_at'] = get_current_utc_time();
+            $data['created_at'] = get_current_utc_time();
         }
 
         $save_id = $this->City_model->save($data, $id);
@@ -103,10 +101,9 @@ class City extends MY_Controller {
         return array(
             //$data->created_at,
             //format_to_relative_time($data->created_at),
-            // format_to_date($data->created_at, false),
-            $data->state,
+            format_to_date($data->created_at, false),
             $data->title,
-            // nl2br($data->description),
+            nl2br($data->description),
             modal_anchor(get_uri("city/modal_form"), "<i class='fa fa-pencil'></i>", array("class" => "edit", "title" => lang('edit_city'), "data-post-id" => $data->id))
             . js_anchor("<i class='fa fa-times fa-fw'></i>", array('title' => lang('delete_city'), "class" => "delete", "data-id" => $data->id, "data-action-url" => get_uri("city/delete"), "data-action" => "delete"))
         );

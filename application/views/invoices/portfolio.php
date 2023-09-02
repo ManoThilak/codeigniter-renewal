@@ -15,7 +15,7 @@
             <div class="tab-title clearfix no-border">
                 <div class="title-button-group">
                     <?php // echo modal_anchor(get_uri("invoice_payments/payment_modal_form"), "<i class='fa fa-plus-circle'></i> " . lang('add_payment'), array("class" => "btn btn-default mb0", "title" => lang('add_payment'))); ?>
-                     <button type="button" id="relo" class="btn btn-default mb0" ><i class='fa fa-reset'></i> <?php echo lang('reset'); ?></button>
+                     <button type="button" id="relo" class="btn btn-default mb0" ><i class='fa fa-refresh'></i> <?php echo lang('reset'); ?></button>
                 </div>
             </div>
         </ul>
@@ -50,7 +50,7 @@
     } else if( sta == "expiry_report" ) {
         var link = '<?php echo_uri("invoices/list_data_expiry"); ?>'
     } 
-
+     <?php // echo '<button type="button" id="relo" class="btn btn-default mb0" ><i class="fa fa-refresh"></i> Reset</button>'?>
     $(selector).appTable({
     source: '<?php echo_uri("invoices/list_data_portfolio"); ?>',
             dateRangeType: dateRange,
@@ -65,6 +65,7 @@
                             {name: "currency", class: "w150", options: <?php echo $currencies_dropdown; ?>}
             <?php } ?>
             ],
+
             rangeDatepicker: customDatePicker,
             columns: [
             {title: "ID", "class": "w5p"},

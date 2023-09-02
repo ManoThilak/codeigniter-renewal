@@ -10,9 +10,9 @@
         <div class="col-sm-12 col-lg-12">
             <div class="panel panel-default">
                 <div class="page-title clearfix">
-                    <h4> <?php echo lang('city'); ?></h4>
+                    <h4> <?php echo lang('state_master'); ?></h4>
                     <div class="title-button-group">
-                        <?php echo modal_anchor(get_uri("city/modal_form"), "<i class='fa fa-plus-circle'></i> " . lang('add_city'), array("class" => "btn btn-default", "title" => lang('add_city'))); ?>
+                        <?php echo modal_anchor(get_uri("state/modal_form"), "<i class='fa fa-plus-circle'></i> " . lang('add_state'), array("class" => "btn btn-default", "title" => lang('add_state'))); ?>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -27,10 +27,10 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#godown-table").appTable({
-            source: '<?php echo_uri("city/list_data") ?>',
+            source: '<?php echo_uri("state/list_data") ?>',
             columns: [
-                {title: '<?php echo lang("state"); ?>'},
-                {title: '<?php echo lang("city") ?>'},
+                // {title: '<?php echo lang("created_date"); ?>', "class": "w200"},
+                {title: '<?php echo lang("state") ?>'},
                 // {title: '<?php echo lang("description") ?>'},
                 {title: '<i class="fa fa-bars"></i>', "class": "text-center option w100"}
             ]

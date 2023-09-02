@@ -406,12 +406,23 @@ class Left_menu {
             // $sidebar_menu["pinvoices"] = array("name" => "pinvoices", "url" => "pinvoices", "class" => "fa-file-text");
 
 
+            $sidebar_menu["invoices"] = array("name" => "invoices", "url" => "invoices", "class" => "fa-money");
 
 
 
 
+            $master_submenu = array();
+            $master_url = "";
+                
+            $master_submenu[] = array("name" => "items", "url" => "items", "class" => "fa-money");
 
+            $master_submenu[] = array("name" => "bcategory", "url" => "bcategory", "class" => "fa-money");
 
+            $master_submenu[] = array("name" => "state", "url" => "state", "class" => "fa-money");
+
+            $master_submenu[] = array("name" => "city", "url" => "city", "class" => "fa-money");
+
+              $sidebar_menu["master"] = array("name" => "master", "url" => $master_url, "class" => "fa-list-ul ftlayer", "submenu" => $master_submenu);
             
 
 
@@ -421,22 +432,14 @@ class Left_menu {
 
 
 
-
-
-
-
-
-
-
-
-
-
             if ($access_items && (get_setting("module_invoice") == "1" || get_setting("module_estimate") == "1" )) {
-                $sidebar_menu["items"] = array("name" => "items", "url" => "items", "class" => "fa-list-ul");
-                $sidebar_menu["bcategory"] = array("name" => "bcategory", "url" => "bcategory", "class" => "fa-list-ul");
+                // $sidebar_menu["items"] = array("name" => "items", "url" => "items", "class" => "fa-list-ul");
+                // $sidebar_menu["bcategory"] = array("name" => "bcategory", "url" => "bcategory", "class" => "fa-list-ul");
+                // $sidebar_menu["state"] = array("name" => "state", "url" => "state", "class" => "fa-list-ul");
+                // $sidebar_menu["city"] = array("name" => "city", "url" => "city", "class" => "fa-list-ul");
             }
 
-             $sidebar_menu["invoices"] = array("name" => "invoices", "url" => "invoices", "class" => "fa-money");
+             
 
 
 
