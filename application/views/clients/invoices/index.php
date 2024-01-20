@@ -34,20 +34,14 @@
             columns: [
                 {title: '<?php echo lang("id") ?>', "class": "w10p"},
                 {targets: [1], visible: false, searchable: false},
-                //{title: "<?php echo lang("project") ?>"},
-                // {visible: false, searchable: false},
-                {title: "<?php echo lang("bill_date") ?>", "class": "w10p", "iDataSort": 3},
-                // {visible: false, searchable: false},
-                
-                {title: "<?php echo lang("due_date") ?>", "class": "w10p", "iDataSort": 5},
-                // {visible: false, searchable: false},
+                {title: "<?php echo lang("phone") ?>", "class": "w15p"},
                 {title: "<?php echo lang("domain_name") ?>", "class": "w15p"},
+                {title: "<?php echo lang("total") ?>", "class": "w10p", "iDataSort": 3},
+                {title: "<?php echo lang("due_date") ?>", "class": "w10p", "iDataSort": 5},
+                
                 {title: "<?php echo lang("next_followupdate") ?>", "class": "w20p", "iDataSort": 5},
-                {title: "<?php echo lang("items") ?>", "class": ""},
-                // {title: "<?php echo lang("invoice_value") ?>", "class": "w10p text-right"},
-                // {title: "<?php echo lang("payment_received") ?>", "class": "w10p text-right"},
-                // {title: "<?php echo lang("due") ?>", "class": "w10p text-right"},
-                {title: '<?php echo lang("status") ?>', "class": "w10p text-center"},
+                {title: "F <?php echo lang("status") ?>", "class": ""},
+                {title: 'D <?php echo lang("status") ?>', "class": "w10p text-center"},
                 {title: '<i class="fa fa-bars"></i>', "class": "text-center dropdown-option w100"}
                 <?php echo $custom_field_headers; ?>
             ],

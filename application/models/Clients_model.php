@@ -106,7 +106,7 @@ class Clients_model extends Crud_model {
         $invoice_value_select = "IFNULL(invoice_details.invoice_value,0)";
         $payment_value_select = "IFNULL(invoice_details.payment_received,0)";
 
-        $sql = "SELECT $clients_table.*, CONCAT($users_table.first_name, ' ', $users_table.last_name) AS primary_contact, $users_table.id AS primary_contact_id, $users_table.image AS contact_avatar,  project_table.total_projects,gift_table.total_gifts,invoices.renewal_status, $payment_value_select AS payment_received $select_custom_fieds,
+        $sql = "SELECT $clients_table.*, CONCAT($users_table.first_name, ' ', $users_table.last_name) AS primary_contact, $users_table.id AS primary_contact_id, $users_table.image AS contact_avatar,  project_table.total_projects,gift_table.total_gifts, $payment_value_select AS payment_received $select_custom_fieds,
                 IF((($invoice_value_select > $payment_value_select) AND ($invoice_value_select - $payment_value_select) <0.05), $payment_value_select, $invoice_value_select) AS invoice_value,
                 (SELECT GROUP_CONCAT($client_groups_table.title) FROM $client_groups_table WHERE FIND_IN_SET($client_groups_table.id, $clients_table.group_ids)) AS client_groups, $lead_status_table.title AS lead_status_title,  $lead_status_table.color AS lead_status_color,
                 owner_details.owner_name, owner_details.owner_avatar,salesmanager.company_name as salesname,
@@ -118,7 +118,7 @@ class Clients_model extends Crud_model {
         LEFT JOIN salesmanager ON salesmanager.id = $clients_table.salesmanager_id 
         left join state on state.id =$clients_table.state_id
         left join city on city.id =$clients_table.city_id 
-        LEFT JOIN invoices ON invoices.client_id = $clients_table.id 
+     
 
 
 

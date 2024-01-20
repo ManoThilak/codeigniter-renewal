@@ -130,7 +130,7 @@ class Invoices_model extends Crud_model {
 
 
 
-        $sql = "SELECT $invoices_table.*,salesmanager.company_name as entry_idd, $clients_table.currency, $clients_table.salesmanager_id, $clients_table.currency_symbol, $clients_table.company_name, $projects_table.title AS project_title,sevice_table.combined_titles,sevice_table.total_amt,
+        $sql = "SELECT $invoices_table.*,salesmanager.company_name as entry_idd, $clients_table.currency, $clients_table.salesmanager_id, $clients_table.currency_symbol, $clients_table.company_name,$clients_table.phone, $projects_table.title AS project_title,sevice_table.combined_titles,sevice_table.total_amt,
            $invoice_value_calculation_query AS invoice_value, IFNULL(payments_table.payment_received,0) AS payment_received, tax_table.percentage AS tax_percentage, tax_table2.percentage AS tax_percentage2, tax_table3.percentage AS tax_percentage3, CONCAT($users_table.first_name, ' ',$users_table.last_name) AS cancelled_by_user $select_custom_fieds
         FROM $invoices_table
         LEFT JOIN $clients_table ON $clients_table.id= $invoices_table.client_id

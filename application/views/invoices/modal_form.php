@@ -423,12 +423,23 @@
                 var billDate = $('#invoice_bill_date').val();
                 var dueDate = moment(billDate, dateFormat).add(defaultDue, 'days').format(dateFormat);
                 $("#invoice_due_date").val(dueDate);
-
+                // alert("sf");
+                 
             };
 
             $("#invoice_bill_date").change(function () {
                 setDefaultDueDate();
             });
+            
+            $("#invoice_due_date").blur(function () {
+                   var dueDateField = $("#invoice_due_date");
+                    if (dueDateField.val() === "") {
+                        setDefaultDueDate();
+                    }
+              
+            });
+            
+            
 
             setDefaultDueDate();
         }

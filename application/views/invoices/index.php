@@ -65,27 +65,15 @@
             ],
             rangeDatepicker: customDatePicker,
             columns: [
-            {title: "ID", "class": "w5p"},
+            {title: "ID"},
             {title: "<?php echo lang("client") ?>", "class": ""},
-            //{title: "<?php echo lang("project") ?>", "class": "w15p"},
-            // {visible: false, searchable: false},
-            // {title: "<?php echo lang("bill_date") ?>", "class": "w10p", "iDataSort": 3},
-            // {visible: false, searchable: false},
-            {title: "<?php echo lang("due_date") ?>", "class": "w10p", "iDataSort": 5},
-            // {visible: false, searchable: false},
+            {title: "<?php echo lang("phone") ?>", "class": ""},
             {title: "<?php echo lang("domain_name") ?>", "class": "w15p"},
             {title: "<?php echo lang("total") ?>", "class": "w10p text-right"},
-            {title: "D <?php echo lang("status") ?>", "class": "w5p text-center"},
+            {title: "<?php echo lang("due_date") ?>", "class": "w10p", "iDataSort": 5},
             {title: "<?php echo lang("next_followupdate") ?>", "class": "w10p", "iDataSort": 5},
-            // {visible: false, searchable: false},
-            
-            // {title: "<?php echo lang("invoice_value") ?>", "class": "w10p text-right"},
-            // {title: "<?php echo lang("payment_received") ?>", "class": "w10p text-right"},
-            // {title: "<?php echo lang("due") ?>", "class": "w10p text-right"},
             {title: "F <?php echo lang("status") ?>", "class": "w5p text-center"},
-            {title: "<?php echo lang("items") ?>", "class": ""}
-            // {title: "<?php echo lang("entry_by") ?>", "class": ""}
-<?php echo $custom_field_headers; ?>,
+            {title: "D <?php echo lang("status") ?>", "class": "w5p text-center"},
             {title: '<i class="fa fa-bars"></i>', "class": "text-center dropdown-option w50"}
             ],
             printColumns: combineCustomFieldsColumns([0, 1, 2, 3, 5, 7, 8, 9], '<?php echo $custom_field_headers; ?>'),
